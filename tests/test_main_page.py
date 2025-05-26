@@ -1,4 +1,5 @@
 import time
+import pytest
 from pages.main_page import MainPage, MainPageLocators
 from selenium.webdriver.common.by import By
 
@@ -16,6 +17,7 @@ def test_add_and_delete_trainer(browser):
         assert main_page.check_element_is_visible((By.XPATH, "//li[text()='Лера ']")) is False, "Тренер не удален"
 
 
+@pytest.mark.smoke
 def test_add_and_delete_workout(browser):
     main_page = MainPage(browser)
     try:

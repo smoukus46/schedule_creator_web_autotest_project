@@ -1,8 +1,13 @@
 FROM python:3.11-slim
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Установка зависимостей
 RUN apt-get update && apt-get install -y \
+    wget \
     curl \
-    gnupg2 \
+    gnupg \
+    unzip \
     fonts-liberation \
     libappindicator3-1 \
     libasound2 \
@@ -20,17 +25,17 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
+    ca-certificates \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка Google Chrome
-RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/google.gpg \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+# Загрузка .deb напрямую и установка вручную
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    apt-get update && \
+    apt-get install -y ./google-chrome-stable_current_amd64.deb || apt-get -f install -y && \
+    rm google-chrome-stable_current_amd64.deb
 
-# Установка ChromeDriver совместимой версии
+# Установка ChromeDriver вручную
 ARG CHROMEDRIVER_VERSION=136.0.7103.113
 RUN curl -SL "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -o chromedriver.zip \
     && unzip chromedriver.zip \

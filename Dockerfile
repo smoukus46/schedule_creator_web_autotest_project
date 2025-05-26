@@ -22,7 +22,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем тесты
-COPY ..
+COPY . .
 
 # Устанавливаем allure-pytest
 RUN pip install allure-pytest

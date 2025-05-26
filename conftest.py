@@ -18,11 +18,18 @@ sys.path.insert(0, project_root)
 def browser(request):
 
     options = Options()
+    options.add_argument("--headless")  # ОБЯЗАТЕЛЬНО
+    options.add_argument("--no-sandbox")  # ОБЯЗАТЕЛЬНО для Docker
+    options.add_argument("--disable-dev-shm-usage")  # ОБЯЗАТЕЛЬНО для Docker
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--remote-debugging-port=9222")
     options.page_load_strategy = 'eager'
     options.add_argument("--autoplay-policy=no-user-gesture-required")
 
     browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-    browser.maximize_window()
+    # Если запускается не в docker можно раскомментировать строку
+    # browser.maximize_window()
 
     yield browser
     browser.quit()

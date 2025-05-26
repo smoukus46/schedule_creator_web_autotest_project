@@ -45,14 +45,14 @@ class MainPage:
         self.browser = browser
 
     @allure.step("Открыть главную страницу")
-    def open_main_page(self):
+    def open_main_page(self) -> None:
         self.browser.get('http://195.133.66.33:8000/')
 
     @allure.step("Заполнить поле")
-    def fill_input_field(self, locator: tuple, value: str):
+    def fill_input_field(self, locator: tuple, value: str) -> None:
         self.browser.find_element(*locator).send_keys(value)
 
-    def element_click(self, locator):
+    def element_click(self, locator) -> None:
         wait = WebDriverWait(self.browser, 5, 1)
         wait.until(EC.element_to_be_clickable(locator)).click()
 
@@ -61,7 +61,7 @@ class MainPage:
         return wait.until(EC.visibility_of_element_located(locator))
 
     @allure.step("Проверить, что элемент отображается на странице")
-    def check_element_is_visible(self, locator):
+    def check_element_is_visible(self, locator: tuple):
         try:
             self.find_item(locator)
             return True
@@ -69,11 +69,11 @@ class MainPage:
             return False
 
     @allure.step("Удалить из списка значение")
-    def delete_trainer_or_workout_element(self, elem_text: str):
+    def delete_trainer_or_workout_element(self, elem_text: str) -> None:
         self.element_click((By.XPATH, f"//li[text()='{elem_text}']/button"))
 
     @allure.step("Проверить, что таблица отображается")
-    def table_is_visible(self):
+    def table_is_visible(self) -> bool:
         wait = WebDriverWait(self.browser, 10, 1)
         wait.until(EC.visibility_of_element_located(MainPageLocators.CELLS))
 
@@ -89,21 +89,21 @@ class MainPage:
         return False
 
     @allure.step("Выбрать месяц")
-    def select_month(self, month_index):
+    def select_month(self, month_index) -> None:
         self.element_click(MainPageLocators.DATEPICKER_INPUT)
         month_list = self.browser.find_elements(*MainPageLocators.MONTHS_LIST)
         month_list[month_index].click()
 
     @allure.step("Нажать кнопку 'Показать расписание за выбранный месяц'")
-    def click_show_schedule_button(self):
+    def click_show_schedule_button(self) -> None:
         self.element_click(MainPageLocators.SHOW_SCHEDULE_BUTTON)
 
     @allure.step("Нажать кнопку 'Выгрузить файл с расписанием'")
-    def click_download_schedule_button(self):
+    def click_download_schedule_button(self) -> None:
         self.element_click(MainPageLocators.DOWNLOAD_SCHEDULE_BUTTON)
 
     @allure.step("Проверить, что файл скачался в папку загрузок")
-    def is_file_in_downloads(self, file_name):
+    def is_file_in_downloads(self, file_name: str) -> bool:
         download_path = Path.home() / 'Downloads'
         file_path = download_path / file_name
         print(file_path)
@@ -112,7 +112,7 @@ class MainPage:
         return file_path.is_file()
 
     @allure.step("Включить любую песню")
-    def play_music(self):
+    def play_music(self) -> None:
         action = ActionChains(self.browser)
         frame = self.find_item(MainPageLocators.MUSIC_IFRAME)
 
@@ -126,7 +126,7 @@ class MainPage:
         self.browser.execute_script("arguments[0].click();", music_list[0])
 
     @allure.step("Проверить, что шкала воспроизведения песни заполняется")
-    def progress_bar_value(self):
+    def progress_bar_value(self) -> float:
         progress_bar = self.browser.find_element(*MainPageLocators.PROGRESS_BAR)
         try:
             return float(progress_bar.get_attribute("style")[22:29])
@@ -134,21 +134,21 @@ class MainPage:
             return 0
 
     @allure.step("Выбрать цвет для тренера")
-    def change_trainer_color(self, trainer_index: int, hex_code: str):
+    def change_trainer_color(self, trainer_index: int, hex_code: str) -> None:
         trainer = self.browser.find_elements(*MainPageLocators.TRAINER_COLOR_INPUTS)
         self.browser.execute_script(f"arguments[0].value = '#{hex_code}';", trainer[trainer_index])
         self.browser.execute_script("arguments[0].dispatchEvent(new Event('input'));", trainer[trainer_index])
 
     @allure.step("Добавить строку в таблицу, нажав '+'")
-    def add_row(self):
+    def add_row(self) -> None:
         self.find_item(MainPageLocators.ADD_ROW_BUTTON).click()
 
     @allure.step("Удалить строку, нажав на 'Х'")
-    def delete_row(self, row_index: int):
+    def delete_row(self, row_index: int) -> None:
         self.find_item((By.XPATH, f"//tbody/tr[{row_index}]/button")).click()
 
     @allure.step("Заполнить ячейки")
-    def fill_cells(self, row_index: int = 1):
+    def fill_cells(self, row_index: int = 1) -> None:
         action = ActionChains(self.browser)
         trainer_list = self.browser.find_elements(*MainPageLocators.TRAINER_LIST)
         workout_list = self.browser.find_elements(*MainPageLocators.WORKOUT_LIST)
@@ -159,22 +159,22 @@ class MainPage:
             action.drag_and_drop(workout_list[random.randint(0, 1)], cell).perform()
 
     @allure.step("Выбрать время")
-    def select_time(self, select_index: int, time_value: str):
+    def select_time(self, select_index: int, time_value: str) -> None:
         time_list = Select(self.browser.find_elements(*MainPageLocators.TIME_LIST)[select_index])
         time_list.select_by_value(time_value)
 
     @allure.step("Проверить, что кнопка 'Сохранить созданное расписание' неактивна")
-    def check_disable_status_of_save_button(self):
+    def check_disable_status_of_save_button(self) -> bool:
         if self.find_item(MainPageLocators.SAVE_SCHEDULE_BUTTON).get_attribute("disabled"):
             return True
         else:
             return False
 
     @allure.step("Нажать кнопку 'Сохранить созданное расписание'")
-    def click_save_schedule_button(self):
+    def click_save_schedule_button(self) -> None:
         self.find_item(MainPageLocators.SAVE_SCHEDULE_BUTTON).click()
 
     @allure.step("Сделать скриншот")
-    def take_screenshot(self):
+    def take_screenshot(self) -> None:
         screenshot = self.browser.get_screenshot_as_png()
         allure.attach(screenshot, name="Скриншот", attachment_type=allure.attachment_type.PNG)

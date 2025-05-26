@@ -4,7 +4,7 @@ from pages.main_page import MainPage, MainPageLocators
 from selenium.webdriver.common.by import By
 
 
-def test_add_and_delete_trainer(browser):
+def test_add_and_delete_trainer(browser) -> None:
     main_page = MainPage(browser)
     try:
         main_page.open_main_page()
@@ -18,7 +18,7 @@ def test_add_and_delete_trainer(browser):
 
 
 @pytest.mark.smoke
-def test_add_and_delete_workout(browser):
+def test_add_and_delete_workout(browser) -> None:
     main_page = MainPage(browser)
     try:
         main_page.open_main_page()
@@ -33,7 +33,7 @@ def test_add_and_delete_workout(browser):
                 is False), "Тренировка не удалена"
 
 
-def test_show_workout_table(browser):
+def test_show_workout_table(browser) -> None:
     main_page = MainPage(browser)
     main_page.open_main_page()
     main_page.click_show_schedule_button()
@@ -46,7 +46,7 @@ def test_show_workout_table(browser):
     assert main_page.table_is_visible() is not False, "Расписание не загружено"
 
 
-def test_download_schedule_file(browser):
+def test_download_schedule_file(browser) -> None:
     main_page = MainPage(browser)
     main_page.open_main_page()
     main_page.click_download_schedule_button()
@@ -55,7 +55,7 @@ def test_download_schedule_file(browser):
     assert main_page.is_file_in_downloads('Расписание_тренировок.xlsx') is True, "Файл не скачан"
 
 
-def test_play_music_in_iframe(browser):
+def test_play_music_in_iframe(browser) -> None:
     main_page = MainPage(browser)
     main_page.open_main_page()
     time.sleep(2)
@@ -65,7 +65,7 @@ def test_play_music_in_iframe(browser):
     assert main_page.progress_bar_value() > 0, "Музыка не запустилась"
 
 
-def test_create_schedule(browser):
+def test_create_schedule(browser) -> None:
     main_page = MainPage(browser)
     main_page.open_main_page()
     time.sleep(2)

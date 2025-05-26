@@ -27,6 +27,12 @@ def browser(request):
     options.add_argument("--remote-debugging-port=9222")
     options.page_load_strategy = 'eager'
     options.add_argument("--autoplay-policy=no-user-gesture-required")
+    options.add_experimental_option("prefs", {
+        "download.default_directory": "/root/Downloads",  # здесь будут сохраняться файлы
+        "download.prompt_for_download": False,
+        "directory_upgrade": True,
+        "safebrowsing.enabled": True
+    })
 
     browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager(driver_version="136.0.7103.113").install()),
                                options=options)

@@ -40,7 +40,7 @@ def test_show_workout_table(browser):
     time.sleep(0.5)
     assert (main_page.check_element_is_visible(MainPageLocators.VALIDATION_MESSAGE)
             is not False), "Валлидационное сообщение отсутствует"
-    main_page.select_month(0)
+    main_page.select_month(1)
     main_page.click_show_schedule_button()
     main_page.take_screenshot()
     assert main_page.table_is_visible() is not False, "Расписание не загружено"

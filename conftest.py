@@ -18,6 +18,7 @@ sys.path.insert(0, project_root)
 def browser(request):
 
     options = Options()
+    options.binary_location = "/usr/bin/chromium"
     options.add_argument("--headless")  # ОБЯЗАТЕЛЬНО
     options.add_argument("--no-sandbox")  # ОБЯЗАТЕЛЬНО для Docker
     options.add_argument("--disable-dev-shm-usage")  # ОБЯЗАТЕЛЬНО для Docker

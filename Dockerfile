@@ -4,10 +4,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Установка зависимостей
 RUN apt-get update && apt-get install -y \
-    wget \
     curl \
-    gnupg \
     unzip \
+    gnupg2 \
+    chromium \
+    chromium-driver \
     fonts-liberation \
     libappindicator3-1 \
     libasound2 \
@@ -25,23 +26,8 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
-    ca-certificates \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-
-# Загрузка .deb напрямую и установка вручную
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get update && \
-    apt-get install -y ./google-chrome-stable_current_amd64.deb || apt-get -f install -y && \
-    rm google-chrome-stable_current_amd64.deb
-
-# Установка ChromeDriver вручную
-ARG CHROMEDRIVER_VERSION=136.0.7103.113
-RUN curl -SL "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -o chromedriver.zip \
-    && unzip chromedriver.zip \
-    && mv chromedriver /usr/local/bin/chromedriver \
-    && chmod +x /usr/local/bin/chromedriver \
-    && rm chromedriver.zip
 
 ENV CHROME_BIN=/usr/bin/chromium
 ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver

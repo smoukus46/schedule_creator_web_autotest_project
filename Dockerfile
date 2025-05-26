@@ -23,13 +23,14 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Добавляем репозиторий Google Chrome
-RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+# Установка Google Chrome
+RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/google.gpg \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
-    && apt-get install -y google-chrome-stable
+    && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем нужный ChromeDriver вручную
+# Установка ChromeDriver совместимой версии
 ARG CHROMEDRIVER_VERSION=136.0.7103.113
 RUN curl -SL "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -o chromedriver.zip \
     && unzip chromedriver.zip \
@@ -45,7 +46,7 @@ WORKDIR /tests
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install allure-pytest
+RUN pip install --no-cache-dir allure-pytest
 
 COPY . .
 

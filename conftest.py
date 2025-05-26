@@ -27,7 +27,8 @@ def browser(request):
     options.page_load_strategy = 'eager'
     options.add_argument("--autoplay-policy=no-user-gesture-required")
 
-    browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager(driver_version="136.0.7103.113").install()),
+                               options=options)
     # Если запускается не в docker можно раскомментировать строку
     # browser.maximize_window()
 
